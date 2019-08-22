@@ -1,29 +1,25 @@
-plugins {
-    id 'war'
-    id 'application'
-}
+apply plugin: 'java'
 
 group 'servlettest'
 version '1.0-SNAPSHOT'
-
-sourceCompatibility = 11
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    compile 'org.apache.tomcat.embed:tomcat-embed-core:9.0.21'
+    compile "javax.annotation:javax.annotation-api:1.2",
+            "javax.servlet:javax.servlet-api:4.0.1"
+    testCompile 'org.apache.tomcat.embed:tomcat-embed-core:9.0.21',
+            'io.undertow:undertow-servlet:2.0.22.Final'
     testCompile 'junit:junit:4.12'
+    testCompile 'io.netty:netty-handler:4.1.38.Final',
+            'io.netty:netty-codec-http2:4.1.38.Final',
+            'io.netty:netty-codec-http:4.1.38.Final'
 }
 
-startScripts {
-    mainClassName = "AsyncWriteEmbedded"
-    applicationName = "async_embedded"
-    outputDir = new File(project.buildDir, 'tmp')
-    classpath = jar.outputs.files + configurations.runtime
-}
-
-applicationDistribution.into("bin") {
-    fileMode = 0755
+test {
+    testLogging {
+        showStandardStreams = true
+    }
 }
